@@ -1,0 +1,7 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "no-trailing-whitespace": [true, "ignore-comments", "ignore-blank-lines"],
+        "quotemark": [true, "single"]
+    }
+}

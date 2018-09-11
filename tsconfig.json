@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "moduleResolution": "node",
+      "noImplicitAny": true,
+      "suppressImplicitAnyIndexErrors": true,
+      "allowSyntheticDefaultImports": true,
+      "declaration": true,
+      "declarationDir": "./dist"
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["dist", "node_modules"]
+  }
