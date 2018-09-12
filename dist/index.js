@@ -2182,16 +2182,33 @@ var Color = /** @class */ (function () {
                 return false;
         }
     };
+    /**
+     *
+     *
+     * @static
+     * @param {string} inputColor - The color to use as the basis for the color list
+     * @param {number} numberColors - The number of colours to create in the list
+     * @param {number} shiftAmount - The total amount by which the {inputColor} will have been lightened/darkened from first color to last
+     * @param {string} mixColor -
+     * @param {number} rotate
+     * @param {number} saturation
+     * @returns {string[]}
+     * @memberof Color
+     */
     Color.createColorList = function (inputColor, numberColors, shiftAmount, mixColor, rotate, saturation) {
+        mixColor = mixColor || 'white';
+        rotate = rotate || 0;
+        saturation = saturation || 0;
         var colorsList = [];
         var givenColor = this.isValidHex(inputColor) ? inputColor : this.errorColor;
         var step;
         for (step = 0; step < numberColors; step++) {
             if (this.isValidHex(inputColor)) {
                 colorsList.push(color(givenColor)
-                    .rotate((step + 1) / numberColors * -rotate)
-                    .saturate((step + 1) / numberColors * (saturation / 100))
-                    .mix(color(mixColor), (shiftAmount / 100) * (step + 1) / numberColors).string());
+                    .rotate(((step + 1) / numberColors) * -rotate)
+                    .saturate(((step + 1) / numberColors) * (saturation / 100))
+                    .mix(color(mixColor), ((shiftAmount / 100) * (step + 1)) / numberColors)
+                    .string());
             }
         }
         return colorsList;

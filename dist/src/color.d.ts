@@ -17,6 +17,19 @@ export declare class Color {
      * @memberof Color
      */
     static isValidHex(inputColor: string): boolean;
-    static createColorList(inputColor: string, numberColors: number, shiftAmount: number, mixColor: string, rotate: number, saturation: number): string[];
+    /**
+     *
+     *
+     * @static
+     * @param {string} inputColor - The color to use as the basis for the color list
+     * @param {number} numberColors - The number of colours to create in the list
+     * @param {number} shiftAmount - The total amount by which the {inputColor} will have been lightened/darkened from first color to last
+     * @param {string} mixColor -
+     * @param {number} rotate
+     * @param {number} saturation
+     * @returns {string[]}
+     * @memberof Color
+     */
+    static createColorList(inputColor: string, numberColors: number, shiftAmount: number, mixColor?: string, rotate?: number, saturation?: number): string[];
     private static errorColor;
 }
