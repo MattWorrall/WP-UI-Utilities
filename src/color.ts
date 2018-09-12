@@ -57,10 +57,14 @@ export class Color {
     inputColor: string,
     numberColors: number,
     shiftAmount: number,
-    mixColor: string = 'white',
-    rotate: number = 0,
-    saturation: number = 0
+    mixColor?: string,
+    rotate?: number,
+    saturation?: number
   ): string[] {
+    mixColor = mixColor || 'white';
+    rotate = rotate || 0;
+    saturation = saturation || 0;
+
     const colorsList: string[] = [];
     const givenColor: string = this.isValidHex(inputColor) ? inputColor : this.errorColor;
 
