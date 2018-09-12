@@ -2159,7 +2159,7 @@ var Color = /** @class */ (function () {
      * Tests whether a given color is a valid HEX color.
      *
      * @date 2018-09-10
-     * @private
+     * @public
      * @param {string} inputColor - The color to test.
      * @returns {boolean} - true if the input color is a valid HEX color, else false.
      * @memberof Color
@@ -2230,4 +2230,4 @@ exports.Color = color_1.Color;
 
 /******/ });
 });
-//# sourceMappingURL=wp-ui-utilities.js.map
+//# sourceMappingURL=index.js.map

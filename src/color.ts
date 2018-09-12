@@ -10,12 +10,11 @@
 import * as color from 'color';
 
 export class Color {
-  
   /**
    * Tests whether a given color is a valid HEX color.
    *
    * @date 2018-09-10
-   * @private
+   * @public
    * @param {string} inputColor - The color to test.
    * @returns {boolean} - true if the input color is a valid HEX color, else false.
    * @memberof Color
@@ -41,13 +40,27 @@ export class Color {
     }
   }
 
+  /**
+   *
+   *
+   * @static
+   * @param {string} inputColor - The color to use as the basis for the color list
+   * @param {number} numberColors - The number of colours to create in the list
+   * @param {number} shiftAmount - The total amount by which the {inputColor} will have been lightened/darkened from first color to last
+   * @param {string} mixColor -
+   * @param {number} rotate
+   * @param {number} saturation
+   * @returns {string[]}
+   * @memberof Color
+   */
   public static createColorList(
     inputColor: string,
     numberColors: number,
     shiftAmount: number,
-    mixColor: string,
-    rotate: number,
-    saturation: number): string[] {
+    mixColor: string = 'white',
+    rotate: number = 0,
+    saturation: number = 0
+  ): string[] {
     const colorsList: string[] = [];
     const givenColor: string = this.isValidHex(inputColor) ? inputColor : this.errorColor;
 
@@ -56,9 +69,11 @@ export class Color {
       if (this.isValidHex(inputColor)) {
         colorsList.push(
           color(givenColor)
-            .rotate((step + 1) / numberColors * -rotate)
-            .saturate((step + 1) / numberColors * (saturation / 100))
-            .mix(color(mixColor), (shiftAmount / 100) * (step + 1) / numberColors).string());
+            .rotate(((step + 1) / numberColors) * -rotate)
+            .saturate(((step + 1) / numberColors) * (saturation / 100))
+            .mix(color(mixColor), ((shiftAmount / 100) * (step + 1)) / numberColors)
+            .string()
+        );
       }
     }
 

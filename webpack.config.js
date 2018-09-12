@@ -13,18 +13,16 @@ module.exports = {
     },
     output: {
         path: PATHS.build,
-        filename: '[name].js',
+        filename: 'index.js',
         library: 'WP-UI-Utilities',
         libraryTarget: 'umd'
     },
     devtool: 'source-map',
     module: {
-        rules: [
-            {
-                test: /\.ts$/,
-                loader: 'ts-loader'
-            }
-        ]
+        rules: [{
+            test: /\.ts$/,
+            loader: 'ts-loader'
+        }]
     },
     resolve: {
         extensions: ['.ts', '.js']

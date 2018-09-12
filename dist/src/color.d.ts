@@ -11,7 +11,7 @@ export declare class Color {
      * Tests whether a given color is a valid HEX color.
      *
      * @date 2018-09-10
-     * @private
+     * @public
      * @param {string} inputColor - The color to test.
      * @returns {boolean} - true if the input color is a valid HEX color, else false.
      * @memberof Color
