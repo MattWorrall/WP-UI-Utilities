@@ -8,6 +8,8 @@
  */
 
 import * as color from 'color';
+import * as Enums from './Enums';
+import { IColorOptions } from './IColorOptions';
 
 export class Color {
   /**
@@ -54,82 +56,167 @@ export class Color {
    * @returns {string[]}
    * @memberof Color
    */
-  public static getColorPalatte(
-    inputColor: string,
-    numberColors: number,
-    shiftAmount: number,
-    mixColor?: string,
-    rotate?: number,
-    saturation?: number,
-  ): string[] {
-    mixColor = mixColor || 'white';
-    rotate = rotate || 0;
-    saturation = saturation || 0;
+  public static getColorPalette(options: IColorOptions): string[] {
+    options.mixColor = options.mixColor || Enums.MixColor.White;
+    options.rotate = options.rotate || 0;
+    options.saturation = options.saturation || 0;
 
     const colorsList: string[] = [];
-    const givenColor: string = this.isValidHex(inputColor)
-      ? inputColor
+    options.inputColor = this.isValidHex(options.inputColor)
+      ? options.inputColor
       : this.errorColor;
 
     let step: number;
-    for (step = 0; step < numberColors; step++) {
-      if (this.isValidHex(inputColor)) {
-        colorsList.push(
-          this.getColor(
-            inputColor,
-            numberColors,
-            shiftAmount,
-            mixColor,
-            rotate,
-            saturation,
-            step,
-          ),
-        );
+    for (step = 0; step < options.numberColors; step++) {
+      if (this.isValidHex(options.inputColor)) {
+        colorsList.push(this.getColor(options, step));
       }
     }
 
     return colorsList;
   }
 
+  /**
+   *Get a list of hues based on the color provided
+   *
+   * @static
+   * @param {string} inputColor
+   * @param {number} numberColors
+   * @param {number} shiftAmount
+   * @param {boolean} [asHex]
+   * @returns {string[]}
+   * @memberof Color
+   */
   public static getHues(
     inputColor: string,
     numberColors: number,
     shiftAmount: number,
+    asHex?: boolean,
   ): string[] {
-    let mixColor: string = 'black';
-    const rotate: number = 0; // Set to 0 so that we get hues of the same color, based on {inputColor}
-    const saturation: number = 0;
+    const options: IColorOptions = {
+      inputColor,
+      numberColors,
+      shiftAmount,
+      mixColor: Enums.MixColor.Black,
+      rotate: 0, // Set to 0 so that we get hues of the same color, based on {inputColor}
+      saturation: 0,
+      asHex,
+    };
 
     const colorsList: string[] = [];
 
     let step: number;
     for (step = 0; step < numberColors; step++) {
-      // If more than 4 colors have been requested
+      // Get an equal number of darker and lighter shades, if an uneven number is requested then create more darker colors
       if (step === Math.ceil(numberColors / 2)) {
-        mixColor = 'white';
+        options.mixColor = Enums.MixColor.White;
         colorsList.reverse();
       }
 
       if (this.isValidHex(inputColor)) {
-        colorsList.push(
-          this.getColor(
-            inputColor,
-            numberColors,
-            shiftAmount,
-            mixColor,
-            rotate,
-            saturation,
-            step,
-          ),
-        );
+        colorsList.push(this.getColor(options, step));
       }
     }
 
-    if (mixColor === 'black') {
+    // If we've not done any light colors then we will still need to reverse the colors so they run from dark to light
+    if (options.mixColor === Enums.MixColor.Black) {
       colorsList.reverse();
     }
 
     return colorsList;
+  }
+
+  /**
+   *Gets a list of darker hues based on the color provided
+   *
+   * @static
+   * @param {string} inputColor
+   * @param {number} numberColors
+   * @param {number} shiftAmount
+   * @param {boolean} [asHex]
+   * @returns {string[]}
+   * @memberof Color
+   */
+  public static getDarkHues(
+    inputColor: string,
+    numberColors: number,
+    shiftAmount: number,
+    asHex?: boolean,
+  ): string[] {
+    const options: IColorOptions = {
+      inputColor,
+      numberColors,
+      shiftAmount,
+      mixColor: Enums.MixColor.Black,
+      rotate: 0, // Set to 0 so that we get hues of the same color, based on {inputColor}
+      saturation: 0,
+      asHex,
+    };
+
+    const colorsList: string[] = [];
+
+    let step: number;
+    for (step = 0; step < numberColors; step++) {
+      if (this.isValidHex(inputColor)) {
+        colorsList.push(this.getColor(options, step));
+      }
+    }
+
+    // Reverse the colors so they run from dark to light
+    colorsList.reverse();
+
+    return colorsList;
+  }
+
+  /**
+   * Gets a list of lighter hues based on the color provided
+   *
+   * @static
+   * @param {string} inputColor
+   * @param {number} numberColors
+   * @param {number} shiftAmount
+   * @param {boolean} [asHex]
+   * @returns {string[]}
+   * @memberof Color
+   */
+  public static getLightHues(
+    inputColor: string,
+    numberColors: number,
+    shiftAmount: number,
+    asHex?: boolean,
+  ): string[] {
+    const options: IColorOptions = {
+      inputColor,
+      numberColors,
+      shiftAmount,
+      mixColor: Enums.MixColor.White,
+      rotate: 0, // Set to 0 so that we get hues of the same color, based on {inputColor}
+      saturation: 0,
+      asHex,
+    };
+
+    const colorsList: string[] = [];
+
+    let step: number;
+    for (step = 0; step < numberColors; step++) {
+      if (this.isValidHex(inputColor)) {
+        colorsList.push(this.getColor(options, step));
+      }
+    }
+
+    return colorsList;
+  }
+
+  /**
+   *
+   *
+   * @static
+   * @param {string} backgroundColor
+   * @returns {string}
+   * @memberof Color
+   */
+  public static getFontColor(backgroundColor: string): string {
+    return color(backgroundColor).isLight() ? '#444' : '#FFF';
   }
 
   private static errorColor: string = 'transparent';
@@ -139,33 +226,28 @@ export class Color {
    *
    * @private
    * @static
-   * @param {string} inputColor
-   * @param {number} numberColors
-   * @param {number} shiftAmount
-   * @param {string} mixColor
-   * @param {number} rotate
-   * @param {number} saturation
+   * @param {IColorOptions} options
    * @param {number} index
    * @returns {string}
    * @memberof Color
    */
-  private static getColor(
-    inputColor: string,
-    numberColors: number,
-    shiftAmount: number,
-    mixColor: string,
-    rotate: number,
-    saturation: number,
-    index: number,
-  ): string {
-    const givenColor: string = this.isValidHex(inputColor)
-      ? inputColor
+  private static getColor(options: IColorOptions, index: number): string {
+    const givenColor: string = this.isValidHex(options.inputColor)
+      ? options.inputColor
       : this.errorColor;
 
-    return color(givenColor)
-      .rotate(((index + 1) / numberColors) * -rotate)
-      .saturate(((index + 1) / numberColors) * (saturation / 100))
-      .mix(color(mixColor), ((shiftAmount / 100) * (index + 1)) / numberColors)
-      .string();
+    const colorRgb: color = color(givenColor)
+      .rotate(((index + 1) / options.numberColors) * -options.rotate)
+      .saturate(
+        ((index + 1) / options.numberColors) * (options.saturation / 100),
+      )
+      .mix(
+        color(options.mixColor),
+        ((options.shiftAmount / 100) * (index + 1)) / options.numberColors,
+      );
+
+    return typeof options.asHex === 'undefined' || options.asHex === true
+      ? colorRgb.hex()
+      : colorRgb.string();
   }
 }

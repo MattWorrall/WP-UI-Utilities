@@ -9,7 +9,7 @@ const PATHS = {
 module.exports = {
     mode: 'development',
     entry: {
-        'wp-ui-utilities': PATHS.src + '/index.ts'
+        'wp-ui-utilities': PATHS.src + '/Index.ts'
     },
     output: {
         path: PATHS.build,

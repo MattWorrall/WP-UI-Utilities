@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.ts");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/Index.ts");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -2133,9 +2133,9 @@ swizzle.wrap = function (fn) {
 
 /***/ }),
 
-/***/ "./src/color.ts":
+/***/ "./src/Color.ts":
 /*!**********************!*\
-  !*** ./src/color.ts ***!
+  !*** ./src/Color.ts ***!
   \**********************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -2152,6 +2152,7 @@ swizzle.wrap = function (fn) {
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 var color = __webpack_require__(/*! color */ "./node_modules/color/index.js");
+var Enums = __webpack_require__(/*! ./Enums */ "./src/Enums.ts");
 var Color = /** @class */ (function () {
     function Color() {
     }
@@ -2196,67 +2197,155 @@ var Color = /** @class */ (function () {
      * @returns {string[]}
      * @memberof Color
      */
-    Color.getColorPalatte = function (inputColor, numberColors, shiftAmount, mixColor, rotate, saturation) {
-        mixColor = mixColor || 'white';
-        rotate = rotate || 0;
-        saturation = saturation || 0;
+    Color.getColorPalette = function (options) {
+        options.mixColor = options.mixColor || Enums.MixColor.White;
+        options.rotate = options.rotate || 0;
+        options.saturation = options.saturation || 0;
         var colorsList = [];
-        var givenColor = this.isValidHex(inputColor)
-            ? inputColor
+        options.inputColor = this.isValidHex(options.inputColor)
+            ? options.inputColor
             : this.errorColor;
         var step;
-        for (step = 0; step < numberColors; step++) {
-            if (this.isValidHex(inputColor)) {
-                colorsList.push(this.getColor(inputColor, numberColors, shiftAmount, mixColor, rotate, saturation, step));
+        for (step = 0; step < options.numberColors; step++) {
+            if (this.isValidHex(options.inputColor)) {
+                colorsList.push(this.getColor(options, step));
             }
         }
         return colorsList;
     };
-    Color.getHues = function (inputColor, numberColors, shiftAmount) {
-        var mixColor = 'black';
-        var rotate = 0; // Set to 0 so that we get hues of the same color, based on {inputColor}
-        var saturation = 0;
+    /**
+     *Get a list of hues based on the color provided
+     *
+     * @static
+     * @param {string} inputColor
+     * @param {number} numberColors
+     * @param {number} shiftAmount
+     * @param {boolean} [asHex]
+     * @returns {string[]}
+     * @memberof Color
+     */
+    Color.getHues = function (inputColor, numberColors, shiftAmount, asHex) {
+        var options = {
+            inputColor: inputColor,
+            numberColors: numberColors,
+            shiftAmount: shiftAmount,
+            mixColor: Enums.MixColor.Black,
+            rotate: 0,
+            saturation: 0,
+            asHex: asHex,
+        };
         var colorsList = [];
         var step;
         for (step = 0; step < numberColors; step++) {
-            // If more than 4 colors have been requested
+            // Get an equal number of darker and lighter shades, if an uneven number is requested then create more darker colors
             if (step === Math.ceil(numberColors / 2)) {
-                mixColor = 'white';
+                options.mixColor = Enums.MixColor.White;
                 colorsList.reverse();
             }
             if (this.isValidHex(inputColor)) {
-                colorsList.push(this.getColor(inputColor, numberColors, shiftAmount, mixColor, rotate, saturation, step));
+                colorsList.push(this.getColor(options, step));
             }
         }
-        if (mixColor === 'black') {
+        // If we've not done any light colors then we will still need to reverse the colors so they run from dark to light
+        if (options.mixColor === Enums.MixColor.Black) {
             colorsList.reverse();
         }
         return colorsList;
+    };
+    /**
+     *Gets a list of darker hues based on the color provided
+     *
+     * @static
+     * @param {string} inputColor
+     * @param {number} numberColors
+     * @param {number} shiftAmount
+     * @param {boolean} [asHex]
+     * @returns {string[]}
+     * @memberof Color
+     */
+    Color.getDarkHues = function (inputColor, numberColors, shiftAmount, asHex) {
+        var options = {
+            inputColor: inputColor,
+            numberColors: numberColors,
+            shiftAmount: shiftAmount,
+            mixColor: Enums.MixColor.Black,
+            rotate: 0,
+            saturation: 0,
+            asHex: asHex,
+        };
+        var colorsList = [];
+        var step;
+        for (step = 0; step < numberColors; step++) {
+            if (this.isValidHex(inputColor)) {
+                colorsList.push(this.getColor(options, step));
+            }
+        }
+        // Reverse the colors so they run from dark to light
+        colorsList.reverse();
+        return colorsList;
+    };
+    /**
+     * Gets a list of lighter hues based on the color provided
+     *
+     * @static
+     * @param {string} inputColor
+     * @param {number} numberColors
+     * @param {number} shiftAmount
+     * @param {boolean} [asHex]
+     * @returns {string[]}
+     * @memberof Color
+     */
+    Color.getLightHues = function (inputColor, numberColors, shiftAmount, asHex) {
+        var options = {
+            inputColor: inputColor,
+            numberColors: numberColors,
+            shiftAmount: shiftAmount,
+            mixColor: Enums.MixColor.White,
+            rotate: 0,
+            saturation: 0,
+            asHex: asHex,
+        };
+        var colorsList = [];
+        var step;
+        for (step = 0; step < numberColors; step++) {
+            if (this.isValidHex(inputColor)) {
+                colorsList.push(this.getColor(options, step));
+            }
+        }
+        return colorsList;
+    };
+    /**
+     *
+     *
+     * @static
+     * @param {string} backgroundColor
+     * @returns {string}
+     * @memberof Color
+     */
+    Color.getFontColor = function (backgroundColor) {
+        return color(backgroundColor).isLight() ? '#444' : '#FFF';
     };
     /**
      * Generates a color based on the parameters passed in
      *
      * @private
      * @static
-     * @param {string} inputColor
-     * @param {number} numberColors
-     * @param {number} shiftAmount
-     * @param {string} mixColor
-     * @param {number} rotate
-     * @param {number} saturation
+     * @param {IColorOptions} options
      * @param {number} index
      * @returns {string}
      * @memberof Color
      */
-    Color.getColor = function (inputColor, numberColors, shiftAmount, mixColor, rotate, saturation, index) {
-        var givenColor = this.isValidHex(inputColor)
-            ? inputColor
+    Color.getColor = function (options, index) {
+        var givenColor = this.isValidHex(options.inputColor)
+            ? options.inputColor
             : this.errorColor;
-        return color(givenColor)
-            .rotate(((index + 1) / numberColors) * -rotate)
-            .saturate(((index + 1) / numberColors) * (saturation / 100))
-            .mix(color(mixColor), ((shiftAmount / 100) * (index + 1)) / numberColors)
-            .string();
+        var colorRgb = color(givenColor)
+            .rotate(((index + 1) / options.numberColors) * -options.rotate)
+            .saturate(((index + 1) / options.numberColors) * (options.saturation / 100))
+            .mix(color(options.mixColor), ((options.shiftAmount / 100) * (index + 1)) / options.numberColors);
+        return typeof options.asHex === 'undefined' || options.asHex === true
+            ? colorRgb.hex()
+            : colorRgb.string();
     };
     Color.errorColor = 'transparent';
     return Color;
@@ -2266,9 +2355,28 @@ exports.Color = Color;
 
 /***/ }),
 
-/***/ "./src/index.ts":
+/***/ "./src/Enums.ts":
 /*!**********************!*\
-  !*** ./src/index.ts ***!
+  !*** ./src/Enums.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var MixColor;
+(function (MixColor) {
+    MixColor["White"] = "white";
+    MixColor["Black"] = "black";
+})(MixColor = exports.MixColor || (exports.MixColor = {}));
+
+
+/***/ }),
+
+/***/ "./src/Index.ts":
+/*!**********************!*\
+  !*** ./src/Index.ts ***!
   \**********************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -2284,8 +2392,8 @@ exports.Color = Color;
  * without the prior written consent of Burning Glass Technologies.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-var color_1 = __webpack_require__(/*! ./color */ "./src/color.ts");
-exports.Color = color_1.Color;
+var Color_1 = __webpack_require__(/*! ./Color */ "./src/Color.ts");
+exports.Color = Color_1.Color;
 
 
 /***/ })

@@ -6,4 +6,4 @@
  * any form or by any means, electronic, mechanical or otherwise, is prohibited
  * without the prior written consent of Burning Glass Technologies.
  */
-export { Color } from './color';
+export { Color } from './Color';

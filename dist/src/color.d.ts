@@ -6,6 +6,7 @@
  * any form or by any means, electronic, mechanical or otherwise, is prohibited
  * without the prior written consent of Burning Glass Technologies.
  */
+import { IColorOptions } from './IColorOptions';
 export declare class Color {
     /**
      * Tests whether a given color is a valid HEX color.
@@ -31,20 +32,59 @@ export declare class Color {
      * @returns {string[]}
      * @memberof Color
      */
-    static getColorPalatte(inputColor: string, numberColors: number, shiftAmount: number, mixColor?: string, rotate?: number, saturation?: number): string[];
-    static getHues(inputColor: string, numberColors: number, shiftAmount: number): string[];
+    static getColorPalette(options: IColorOptions): string[];
+    /**
+     *Get a list of hues based on the color provided
+     *
+     * @static
+     * @param {string} inputColor
+     * @param {number} numberColors
+     * @param {number} shiftAmount
+     * @param {boolean} [asHex]
+     * @returns {string[]}
+     * @memberof Color
+     */
+    static getHues(inputColor: string, numberColors: number, shiftAmount: number, asHex?: boolean): string[];
+    /**
+     *Gets a list of darker hues based on the color provided
+     *
+     * @static
+     * @param {string} inputColor
+     * @param {number} numberColors
+     * @param {number} shiftAmount
+     * @param {boolean} [asHex]
+     * @returns {string[]}
+     * @memberof Color
+     */
+    static getDarkHues(inputColor: string, numberColors: number, shiftAmount: number, asHex?: boolean): string[];
+    /**
+     * Gets a list of lighter hues based on the color provided
+     *
+     * @static
+     * @param {string} inputColor
+     * @param {number} numberColors
+     * @param {number} shiftAmount
+     * @param {boolean} [asHex]
+     * @returns {string[]}
+     * @memberof Color
+     */
+    static getLightHues(inputColor: string, numberColors: number, shiftAmount: number, asHex?: boolean): string[];
+    /**
+     *
+     *
+     * @static
+     * @param {string} backgroundColor
+     * @returns {string}
+     * @memberof Color
+     */
+    static getFontColor(backgroundColor: string): string;
     private static errorColor;
     /**
      * Generates a color based on the parameters passed in
      *
      * @private
      * @static
-     * @param {string} inputColor
-     * @param {number} numberColors
-     * @param {number} shiftAmount
-     * @param {string} mixColor
-     * @param {number} rotate
-     * @param {number} saturation
+     * @param {IColorOptions} options
      * @param {number} index
      * @returns {string}
      * @memberof Color
