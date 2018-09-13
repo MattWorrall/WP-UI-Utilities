@@ -2188,7 +2188,8 @@ var Color = /** @class */ (function () {
      * @static
      * @param {string} inputColor - The color to use as the basis for the color list
      * @param {number} numberColors - The number of colours to create in the list
-     * @param {number} shiftAmount - The total amount by which the {inputColor} will have changed from first color to last
+     * @param {number} shiftAmount - The total amount by which the {inputColor} will have changed
+     * from first color to last
      * @param {string} mixColor - The color to mix with {inputColor}
      * @param {number} rotate -
      * @param {number} saturation -
@@ -2200,7 +2201,9 @@ var Color = /** @class */ (function () {
         rotate = rotate || 0;
         saturation = saturation || 0;
         var colorsList = [];
-        var givenColor = this.isValidHex(inputColor) ? inputColor : this.errorColor;
+        var givenColor = this.isValidHex(inputColor)
+            ? inputColor
+            : this.errorColor;
         var step;
         for (step = 0; step < numberColors; step++) {
             if (this.isValidHex(inputColor)) {
@@ -2219,15 +2222,19 @@ var Color = /** @class */ (function () {
             // If more than 4 colors have been requested
             if (step === Math.ceil(numberColors / 2)) {
                 mixColor = 'white';
+                colorsList.reverse();
             }
             if (this.isValidHex(inputColor)) {
                 colorsList.push(this.getColor(inputColor, numberColors, shiftAmount, mixColor, rotate, saturation, step));
             }
         }
+        if (mixColor === 'black') {
+            colorsList.reverse();
+        }
         return colorsList;
     };
     /**
-     *Generates a color based on the parameters passed in
+     * Generates a color based on the parameters passed in
      *
      * @private
      * @static
@@ -2242,7 +2249,9 @@ var Color = /** @class */ (function () {
      * @memberof Color
      */
     Color.getColor = function (inputColor, numberColors, shiftAmount, mixColor, rotate, saturation, index) {
-        var givenColor = this.isValidHex(inputColor) ? inputColor : this.errorColor;
+        var givenColor = this.isValidHex(inputColor)
+            ? inputColor
+            : this.errorColor;
         return color(givenColor)
             .rotate(((index + 1) / numberColors) * -rotate)
             .saturate(((index + 1) / numberColors) * (saturation / 100))

@@ -46,7 +46,8 @@ export class Color {
    * @static
    * @param {string} inputColor - The color to use as the basis for the color list
    * @param {number} numberColors - The number of colours to create in the list
-   * @param {number} shiftAmount - The total amount by which the {inputColor} will have changed from first color to last
+   * @param {number} shiftAmount - The total amount by which the {inputColor} will have changed
+   * from first color to last
    * @param {string} mixColor - The color to mix with {inputColor}
    * @param {number} rotate -
    * @param {number} saturation -
@@ -59,29 +60,45 @@ export class Color {
     shiftAmount: number,
     mixColor?: string,
     rotate?: number,
-    saturation?: number
+    saturation?: number,
   ): string[] {
     mixColor = mixColor || 'white';
     rotate = rotate || 0;
     saturation = saturation || 0;
 
     const colorsList: string[] = [];
-    const givenColor: string = this.isValidHex(inputColor) ? inputColor : this.errorColor;
+    const givenColor: string = this.isValidHex(inputColor)
+      ? inputColor
+      : this.errorColor;
 
     let step: number;
     for (step = 0; step < numberColors; step++) {
       if (this.isValidHex(inputColor)) {
-        colorsList.push(this.getColor(inputColor, numberColors, shiftAmount, mixColor, rotate, saturation, step));
+        colorsList.push(
+          this.getColor(
+            inputColor,
+            numberColors,
+            shiftAmount,
+            mixColor,
+            rotate,
+            saturation,
+            step,
+          ),
+        );
       }
     }
 
     return colorsList;
   }
 
-  public static getHues(inputColor: string, numberColors: number, shiftAmount: number): string[] {
+  public static getHues(
+    inputColor: string,
+    numberColors: number,
+    shiftAmount: number,
+  ): string[] {
     let mixColor: string = 'black';
-    let rotate: number = 0; // Set to 0 so that we get hues of the same color, based on {inputColor}
-    let saturation: number = 0;
+    const rotate: number = 0; // Set to 0 so that we get hues of the same color, based on {inputColor}
+    const saturation: number = 0;
 
     const colorsList: string[] = [];
 
@@ -90,11 +107,26 @@ export class Color {
       // If more than 4 colors have been requested
       if (step === Math.ceil(numberColors / 2)) {
         mixColor = 'white';
+        colorsList.reverse();
       }
 
       if (this.isValidHex(inputColor)) {
-        colorsList.push(this.getColor(inputColor, numberColors, shiftAmount, mixColor, rotate, saturation, step));
+        colorsList.push(
+          this.getColor(
+            inputColor,
+            numberColors,
+            shiftAmount,
+            mixColor,
+            rotate,
+            saturation,
+            step,
+          ),
+        );
       }
+    }
+
+    if (mixColor === 'black') {
+      colorsList.reverse();
     }
 
     return colorsList;
@@ -103,7 +135,7 @@ export class Color {
   private static errorColor: string = 'transparent';
 
   /**
-   *Generates a color based on the parameters passed in
+   * Generates a color based on the parameters passed in
    *
    * @private
    * @static
@@ -124,9 +156,11 @@ export class Color {
     mixColor: string,
     rotate: number,
     saturation: number,
-    index: number
+    index: number,
   ): string {
-    const givenColor: string = this.isValidHex(inputColor) ? inputColor : this.errorColor;
+    const givenColor: string = this.isValidHex(inputColor)
+      ? inputColor
+      : this.errorColor;
 
     return color(givenColor)
       .rotate(((index + 1) / numberColors) * -rotate)

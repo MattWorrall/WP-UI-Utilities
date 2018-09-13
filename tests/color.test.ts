@@ -66,5 +66,12 @@ describe('Color tests', () => {
     done();
   });
 
+  it('Creates a list of color hues based on a valid HEX colour', done => {
+    let colors = Color.getHues('#3498DB', 7, 60);
+    console.log(colors);
+    expect(colors.length).toBe(7);
+    done();
+  });
+
   //#endregion
 });

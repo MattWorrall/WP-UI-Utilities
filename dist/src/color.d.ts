@@ -23,7 +23,8 @@ export declare class Color {
      * @static
      * @param {string} inputColor - The color to use as the basis for the color list
      * @param {number} numberColors - The number of colours to create in the list
-     * @param {number} shiftAmount - The total amount by which the {inputColor} will have changed from first color to last
+     * @param {number} shiftAmount - The total amount by which the {inputColor} will have changed
+     * from first color to last
      * @param {string} mixColor - The color to mix with {inputColor}
      * @param {number} rotate -
      * @param {number} saturation -
@@ -34,7 +35,7 @@ export declare class Color {
     static getHues(inputColor: string, numberColors: number, shiftAmount: number): string[];
     private static errorColor;
     /**
-     *Generates a color based on the parameters passed in
+     * Generates a color based on the parameters passed in
      *
      * @private
      * @static
