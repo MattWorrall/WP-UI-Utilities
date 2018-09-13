@@ -2183,19 +2183,19 @@ var Color = /** @class */ (function () {
         }
     };
     /**
-     *
+     * Creates a color palatte based on the main {inputColor}
      *
      * @static
      * @param {string} inputColor - The color to use as the basis for the color list
      * @param {number} numberColors - The number of colours to create in the list
-     * @param {number} shiftAmount - The total amount by which the {inputColor} will have been lightened/darkened from first color to last
-     * @param {string} mixColor -
-     * @param {number} rotate
-     * @param {number} saturation
+     * @param {number} shiftAmount - The total amount by which the {inputColor} will have changed from first color to last
+     * @param {string} mixColor - The color to mix with {inputColor}
+     * @param {number} rotate -
+     * @param {number} saturation -
      * @returns {string[]}
      * @memberof Color
      */
-    Color.createColorList = function (inputColor, numberColors, shiftAmount, mixColor, rotate, saturation) {
+    Color.getColorPalatte = function (inputColor, numberColors, shiftAmount, mixColor, rotate, saturation) {
         mixColor = mixColor || 'white';
         rotate = rotate || 0;
         saturation = saturation || 0;
@@ -2204,14 +2204,50 @@ var Color = /** @class */ (function () {
         var step;
         for (step = 0; step < numberColors; step++) {
             if (this.isValidHex(inputColor)) {
-                colorsList.push(color(givenColor)
-                    .rotate(((step + 1) / numberColors) * -rotate)
-                    .saturate(((step + 1) / numberColors) * (saturation / 100))
-                    .mix(color(mixColor), ((shiftAmount / 100) * (step + 1)) / numberColors)
-                    .string());
+                colorsList.push(this.getColor(inputColor, numberColors, shiftAmount, mixColor, rotate, saturation, step));
             }
         }
         return colorsList;
+    };
+    Color.getHues = function (inputColor, numberColors, shiftAmount) {
+        var mixColor = 'black';
+        var rotate = 0; // Set to 0 so that we get hues of the same color, based on {inputColor}
+        var saturation = 0;
+        var colorsList = [];
+        var step;
+        for (step = 0; step < numberColors; step++) {
+            // If more than 4 colors have been requested
+            if (step === Math.ceil(numberColors / 2)) {
+                mixColor = 'white';
+            }
+            if (this.isValidHex(inputColor)) {
+                colorsList.push(this.getColor(inputColor, numberColors, shiftAmount, mixColor, rotate, saturation, step));
+            }
+        }
+        return colorsList;
+    };
+    /**
+     *Generates a color based on the parameters passed in
+     *
+     * @private
+     * @static
+     * @param {string} inputColor
+     * @param {number} numberColors
+     * @param {number} shiftAmount
+     * @param {string} mixColor
+     * @param {number} rotate
+     * @param {number} saturation
+     * @param {number} index
+     * @returns {string}
+     * @memberof Color
+     */
+    Color.getColor = function (inputColor, numberColors, shiftAmount, mixColor, rotate, saturation, index) {
+        var givenColor = this.isValidHex(inputColor) ? inputColor : this.errorColor;
+        return color(givenColor)
+            .rotate(((index + 1) / numberColors) * -rotate)
+            .saturate(((index + 1) / numberColors) * (saturation / 100))
+            .mix(color(mixColor), ((shiftAmount / 100) * (index + 1)) / numberColors)
+            .string();
     };
     Color.errorColor = 'transparent';
     return Color;

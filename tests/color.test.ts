@@ -60,7 +60,7 @@ describe('Color tests', () => {
   //#region createColorList
 
   it('Creates a colour list based on a valid HEX colour', done => {
-    let colors = Color.createColorList('#3498DB', 5, 73);
+    let colors = Color.getColorPalatte('#3498DB', 5, 73);
     console.log(colors);
     expect(colors.length).toBe(5);
     done();
