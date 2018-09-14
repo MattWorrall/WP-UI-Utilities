@@ -3,8 +3,9 @@ const path = require('path'),
 
 const PATHS = {
     src: path.join(__dirname, './src'),
-    build: path.join(__dirname, './dist')
-}
+    build: path.join(__dirname, './dist'),
+    tests: path.join(__dirname, './tests')
+};
 
 module.exports = {
     mode: 'development',
@@ -20,11 +21,11 @@ module.exports = {
     devtool: 'source-map',
     module: {
         rules: [{
-            test: /\.ts$/,
+            test: /src.+\.ts$/,
             loader: 'ts-loader'
         }]
     },
     resolve: {
         extensions: ['.ts', '.js']
     }
-}
+};

@@ -43,13 +43,28 @@ export class Color {
   }
 
   /**
+   * Validates whether the string passed in is a valid RGB/RGBA color
+   *
+   * @static
+   * @param {string} rgb
+   * @returns
+   * @memberof Color
+   */
+  public static isValidRgb(rgb: string) {
+    const regExValidRgb = /^rgba?\((\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d{1,3}%?)(,\s*[01]?\.?\d*)?\)$/;
+    if (regExValidRgb.test(rgb)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Creates a color palatte based on the main {inputColor}
    *
    * @static
    * @param {string} inputColor - The color to use as the basis for the color list
    * @param {number} numberColors - The number of colours to create in the list
-   * @param {number} shiftAmount - The total amount by which the {inputColor} will have changed
-   * from first color to last
+   * @param {number} shiftAmount - The total amount by which the {inputColor} will have changed from first color to last
    * @param {string} mixColor - The color to mix with {inputColor}
    * @param {number} rotate -
    * @param {number} saturation -
@@ -77,7 +92,7 @@ export class Color {
   }
 
   /**
-   *Get a list of hues based on the color provided
+   * Get a list of hues based on the color provided
    *
    * @static
    * @param {string} inputColor
@@ -91,7 +106,7 @@ export class Color {
     inputColor: string,
     numberColors: number,
     shiftAmount: number,
-    asHex?: boolean,
+    asHex?: boolean
   ): string[] {
     const options: IColorOptions = {
       inputColor,
@@ -100,7 +115,7 @@ export class Color {
       mixColor: Enums.MixColor.Black,
       rotate: 0, // Set to 0 so that we get hues of the same color, based on {inputColor}
       saturation: 0,
-      asHex,
+      asHex
     };
 
     const colorsList: string[] = [];
@@ -127,7 +142,7 @@ export class Color {
   }
 
   /**
-   *Gets a list of darker hues based on the color provided
+   * Gets a list of darker hues based on the color provided
    *
    * @static
    * @param {string} inputColor
@@ -141,7 +156,7 @@ export class Color {
     inputColor: string,
     numberColors: number,
     shiftAmount: number,
-    asHex?: boolean,
+    asHex?: boolean
   ): string[] {
     const options: IColorOptions = {
       inputColor,
@@ -150,7 +165,7 @@ export class Color {
       mixColor: Enums.MixColor.Black,
       rotate: 0, // Set to 0 so that we get hues of the same color, based on {inputColor}
       saturation: 0,
-      asHex,
+      asHex
     };
 
     const colorsList: string[] = [];
@@ -183,7 +198,7 @@ export class Color {
     inputColor: string,
     numberColors: number,
     shiftAmount: number,
-    asHex?: boolean,
+    asHex?: boolean
   ): string[] {
     const options: IColorOptions = {
       inputColor,
@@ -192,7 +207,7 @@ export class Color {
       mixColor: Enums.MixColor.White,
       rotate: 0, // Set to 0 so that we get hues of the same color, based on {inputColor}
       saturation: 0,
-      asHex,
+      asHex
     };
 
     const colorsList: string[] = [];
@@ -219,7 +234,33 @@ export class Color {
     return color(backgroundColor).isLight() ? '#444' : '#FFF';
   }
 
+  /**
+   * Converts an RGB color to HEX
+   *
+   * @static
+   * @param {color} rgb
+   * @returns
+   * @memberof Color
+   */
+  public static asHex(rgb: string): string {
+    if (this.isValidRgb(rgb)) {
+      return color(rgb).hex();
+    }
+
+    return null;
+  }
+
+  public static asRgb(hex: string): object {
+    if (this.isValidHex(hex)) {
+      return color(hex).object();
+    }
+
+    return null;
+  }
+
   private static errorColor: string = 'transparent';
+
+  //#region PRIVATE FUNCTIONS
 
   /**
    * Generates a color based on the parameters passed in
@@ -239,15 +280,17 @@ export class Color {
     const colorRgb: color = color(givenColor)
       .rotate(((index + 1) / options.numberColors) * -options.rotate)
       .saturate(
-        ((index + 1) / options.numberColors) * (options.saturation / 100),
+        ((index + 1) / options.numberColors) * (options.saturation / 100)
       )
       .mix(
         color(options.mixColor),
-        ((options.shiftAmount / 100) * (index + 1)) / options.numberColors,
+        ((options.shiftAmount / 100) * (index + 1)) / options.numberColors
       );
 
     return typeof options.asHex === 'undefined' || options.asHex === true
       ? colorRgb.hex()
       : colorRgb.string();
   }
+
+  //#endregion
 }

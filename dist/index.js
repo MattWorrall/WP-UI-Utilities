@@ -2189,8 +2189,7 @@ var Color = /** @class */ (function () {
      * @static
      * @param {string} inputColor - The color to use as the basis for the color list
      * @param {number} numberColors - The number of colours to create in the list
-     * @param {number} shiftAmount - The total amount by which the {inputColor} will have changed
-     * from first color to last
+     * @param {number} shiftAmount - The total amount by which the {inputColor} will have changed from first color to last
      * @param {string} mixColor - The color to mix with {inputColor}
      * @param {number} rotate -
      * @param {number} saturation -
@@ -2214,7 +2213,7 @@ var Color = /** @class */ (function () {
         return colorsList;
     };
     /**
-     *Get a list of hues based on the color provided
+     * Get a list of hues based on the color provided
      *
      * @static
      * @param {string} inputColor
@@ -2232,7 +2231,7 @@ var Color = /** @class */ (function () {
             mixColor: Enums.MixColor.Black,
             rotate: 0,
             saturation: 0,
-            asHex: asHex,
+            asHex: asHex
         };
         var colorsList = [];
         var step;
@@ -2253,7 +2252,7 @@ var Color = /** @class */ (function () {
         return colorsList;
     };
     /**
-     *Gets a list of darker hues based on the color provided
+     * Gets a list of darker hues based on the color provided
      *
      * @static
      * @param {string} inputColor
@@ -2271,7 +2270,7 @@ var Color = /** @class */ (function () {
             mixColor: Enums.MixColor.Black,
             rotate: 0,
             saturation: 0,
-            asHex: asHex,
+            asHex: asHex
         };
         var colorsList = [];
         var step;
@@ -2303,7 +2302,7 @@ var Color = /** @class */ (function () {
             mixColor: Enums.MixColor.White,
             rotate: 0,
             saturation: 0,
-            asHex: asHex,
+            asHex: asHex
         };
         var colorsList = [];
         var step;
